@@ -1,0 +1,258 @@
+<?php
+/**
+ * Montessori Line landing page for WooCommerce product category archive.
+ *
+ * IMPORTANT:
+ * - This file lives in /woocommerce/ so WooCommerce template loading can find it.
+ * - We also add a template_include override in functions.php as a hard fallback.
+ */
+
+defined('ABSPATH') || exit;
+
+$term = get_queried_object();
+if (!($term instanceof WP_Term) || $term->taxonomy !== 'product_cat') {
+  // Safety fallback.
+  wc_get_template('archive-product.php');
+  return;
+}
+
+get_header();
+
+// Pull category description (editable in WP Admin → Products → Categories).
+$desc_raw = trim((string)term_description($term, 'product_cat'));
+if ($desc_raw !== '' && stripos($desc_raw, '<p') === false) {
+  $desc_raw = wpautop($desc_raw);
+}
+if ($desc_raw === '') {
+  $desc_raw = wpautop(
+    "We designed this Montessori Line by going back to the originals — <strong>Golden Beads</strong> and <strong>the Pink Tower</strong> — not to replicate the materials, but to translate their ideas into a visual language for everyday life.\n\n" .
+    "Golden Beads represent clarity and rhythm: one unit at a time, turning complexity into something understandable. The Pink Tower is about proportion, focus, and growth through order — each layer smaller, each step deliberate. We reimagined the Pink Tower as a gentle, expressive character, and used the beads as quiet visual markers throughout the designs. Playful, but never childish.\n\n" .
+    "This line is our way of keeping the beauty of learning close at hand — calm, restrained, and meant to last."
+  );
+}
+
+$desc_html = wp_kses_post($desc_raw);
+
+// Split into lead + body for a more editorial look.
+$parts = preg_split('~</p>\s*~', $desc_html, -1, PREG_SPLIT_NO_EMPTY);
+$lead  = '';
+$body  = '';
+if (!empty($parts)) {
+  $lead = $parts[0] . '</p>';
+  if (count($parts) > 1) {
+    $body = implode('</p>', array_slice($parts, 1)) . '</p>';
+  }
+}
+
+$per_page = 24;
+$paged    = max(1, (int)get_query_var('paged'));
+
+$q = new WP_Query([
+  'post_type'           => 'product',
+  'post_status'         => 'publish',
+  'posts_per_page'      => $per_page,
+  'paged'               => $paged,
+  'ignore_sticky_posts' => true,
+  'tax_query'           => [
+    [
+      'taxonomy' => 'product_cat',
+      'field'    => 'term_id',
+      'terms'    => [(int)$term->term_id],
+    ],
+  ],
+  'orderby' => 'date',
+  'order'   => 'DESC',
+]);
+
+?>
+
+<!-- DNA TEMPLATE MARKER: v12.4 montessori-line -->
+
+<main id="primary" class="site-main dna-line dna-line--montessori" data-dna-template="montessori-line-v93">
+  <section class="dna-line-hero">
+    <div class="dna-line-container">
+      <h1 class="dna-line-title">MONTESSORI LINE</h1>
+
+      <div class="dna-line-story">
+        <?php if ($lead) : ?>
+          <div class="dna-line-lead"><?php echo $lead; ?></div>
+        <?php endif; ?>
+        <?php if ($body) : ?>
+          <div class="dna-line-body"><?php echo $body; ?></div>
+        <?php endif; ?>
+      </div>
+    </div>
+  </section>
+
+  <section class="dna-line-products">
+    <div class="dna-line-container">
+      <h2 class="dna-line-subtitle">PRODUCTS</h2>
+
+      <?php if ($q->have_posts()) : ?>
+        <div class="dna-line-grid">
+          <?php while ($q->have_posts()) : $q->the_post();
+            $pid  = get_the_ID();
+            $link = get_permalink($pid);
+            $name = get_the_title($pid);
+          ?>
+            <article class="dna-line-card">
+              <a class="dna-line-cardlink" href="<?php echo esc_url($link); ?>" aria-label="<?php echo esc_attr($name); ?>">
+                <div class="dna-line-media">
+                  <?php if (has_post_thumbnail($pid)) : ?>
+                    <?php
+                      echo get_the_post_thumbnail(
+                        $pid,
+                        'woocommerce_thumbnail',
+                        ['class' => 'dna-line-img', 'loading' => 'lazy']
+                      );
+                    ?>
+                  <?php else : ?>
+                    <div class="dna-line-placeholder" aria-hidden="true"></div>
+                  <?php endif; ?>
+                </div>
+                <h3 class="dna-line-name"><?php echo esc_html($name); ?></h3>
+                <!-- No price / no add-to-cart on line landing pages -->
+              </a>
+            </article>
+          <?php endwhile; wp_reset_postdata(); ?>
+        </div>
+
+        <?php
+          $pagination = paginate_links([
+            'base'      => str_replace(999999999, '%#%', esc_url(get_pagenum_link(999999999))),
+            'format'    => '?paged=%#%',
+            'current'   => $paged,
+            'total'     => (int)$q->max_num_pages,
+            'type'      => 'list',
+            'prev_text' => 'PREV',
+            'next_text' => 'NEXT',
+          ]);
+        ?>
+
+        <?php if ($pagination) : ?>
+          <nav class="dna-line-pagination" aria-label="Pagination">
+            <?php echo wp_kses_post($pagination); ?>
+          </nav>
+        <?php endif; ?>
+      <?php else : ?>
+        <p class="dna-line-empty">No products found in this line yet.</p>
+      <?php endif; ?>
+    </div>
+  </section>
+
+  <style>
+    /* v12.4: Montessori Line layout — minimal, editorial, consistent with DNA */
+
+    /* Ensure every page has at least one-screen content height */
+    body:not(.home) .site-main{ min-height: 100vh; }
+
+    .dna-line .dna-line-container{ max-width: 1120px; margin: 0 auto; padding: 0 22px; }
+    .dna-line-hero{ padding: 78px 0 40px; }
+    .dna-line-products{ padding: 72px 0 96px; }
+
+    .dna-line-title{
+      margin: 0 0 18px;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      font-weight: 600;
+      font-size: clamp(44px, 5.8vw, 84px);
+      line-height: 1.02;
+    }
+
+    .dna-line-story{ max-width: 860px; }
+    .dna-line-lead p{
+      margin: 0 0 18px;
+      font-weight: 500;
+      font-size: clamp(16px, 1.25vw, 20px);
+      line-height: 1.85;
+      letter-spacing: .015em;
+    }
+    .dna-line-body p{
+      margin: 0 0 18px;
+      font-size: clamp(14px, 1.05vw, 18px);
+      line-height: 1.95;
+      letter-spacing: .01em;
+      opacity: .9;
+    }
+    .dna-line-story strong{ font-weight: 600; }
+
+    .dna-line-subtitle{
+      margin: 0 0 26px;
+      font-size: 12px;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      opacity: .65;
+    }
+
+    .dna-line-grid{
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 44px 30px;
+    }
+    @media (max-width: 980px){
+      .dna-line-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 34px 22px; }
+    }
+    @media (max-width: 560px){
+      .dna-line-grid{ grid-template-columns: 1fr; gap: 26px; }
+    }
+
+    .dna-line-card{ border: 0; background: transparent; }
+    .dna-line-cardlink{ display: block; text-decoration: none; color: inherit; }
+
+    .dna-line-media{
+      position: relative;
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      overflow: hidden;
+      background: transparent;
+    }
+    .dna-line-img{
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .dna-line-placeholder{
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,.04);
+    }
+
+    .dna-line-name{
+      margin: 14px 0 0;
+      font-size: 13px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      font-weight: 500;
+      opacity: .92;
+    }
+
+    .dna-line-empty{ opacity: .7; }
+
+    .dna-line-pagination ul{
+      list-style: none;
+      display: flex;
+      gap: 10px;
+      padding: 0;
+      margin: 30px 0 0;
+      flex-wrap: wrap;
+    }
+    .dna-line-pagination a,
+    .dna-line-pagination span{
+      display: inline-block;
+      border: 1px solid currentColor;
+      padding: 10px 12px;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      font-size: 11px;
+      opacity: .85;
+    }
+    .dna-line-pagination .current{ opacity: 1; }
+  </style>
+</main>
+
+<?php
+get_footer();

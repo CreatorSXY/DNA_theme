@@ -1,0 +1,121 @@
+/* DNA Global Contact Popup — v12.4 architecture (v12.4)
+   Less is more: no shadows, no radius, clean type.
+*/
+
+/* Ensure blockers can sit above the popup when they overlap */
+.site-footer,
+.manifesto{
+  position: relative;
+  z-index: 50;
+}
+
+/* Lift variable computed by JS (how much footer/manifesto intrudes from bottom) */
+:root{ --dna-contact-lift: 0px; }
+
+button.dna-contact-trigger{
+  position: fixed;
+  right: 22px;
+  bottom: calc(22px + var(--dna-contact-lift));
+  z-index: 10; /* intentionally below footer/manifesto (z=50) */
+  background: transparent;
+  border: 1px solid currentColor;
+  color: inherit;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 11px;
+  padding: 12px 14px;
+  cursor: pointer;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  opacity: .85;
+}
+button.dna-contact-trigger:hover{ opacity: 1; }
+
+/* Popup container: no full-screen overlay; click outside closes via JS */
+.dna-contact-popup{
+  position: fixed;
+  right: 22px;
+  bottom: calc(62px + var(--dna-contact-lift)); /* sits above trigger */
+  width: min(380px, calc(100vw - 44px));
+  z-index: 10; /* same layer as trigger, below footer/manifesto */
+  display: none;
+}
+.dna-contact-popup.is-open{ display: block; }
+
+.dna-contact-panel{
+  background: #fff;
+  color: #000;
+  border: 1px solid rgba(0,0,0,.18);
+  padding: 22px;
+  position: relative;
+}
+
+.dna-contact-close{
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.dna-contact-title{
+  margin: 0 0 10px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.dna-contact-note{
+  margin: 0 0 16px;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.6;
+  opacity: .82;
+}
+
+.dna-contact-form input,
+.dna-contact-form textarea{
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 0;
+  border: 1px solid rgba(0,0,0,.22);
+  background: transparent;
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 13px;
+  margin: 0 0 10px;
+}
+
+/* v12.4: Keep Contact popup inputs perfectly square even on WooCommerce pages.
+   WooCommerce form styles are quite specific (e.g. .woocommerce input[type="text"]).
+   We out-specify them here so Name/Email never inherit rounded corners.
+*/
+.dna-contact-popup .dna-contact-form input[type="text"],
+.dna-contact-popup .dna-contact-form input[type="email"],
+.dna-contact-popup .dna-contact-form input[type="tel"],
+.dna-contact-popup .dna-contact-form input[type="password"],
+.dna-contact-popup .dna-contact-form textarea,
+.dna-contact-popup .dna-contact-form select{
+  border-radius: 0 !important;
+}
+
+.dna-contact-form button[type="submit"]{
+  width: 100%;
+  border-radius: 0;
+  background: transparent;
+  border: 1px solid currentColor;
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: .9;
+}
+.dna-contact-form button[type="submit"]:hover{ opacity: 1; }

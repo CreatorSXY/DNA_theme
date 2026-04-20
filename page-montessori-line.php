@@ -11,6 +11,7 @@ if ( have_posts() ) :
     $has_content = trim( wp_strip_all_tags( get_the_content() ) ) !== '';
     ?>
     <main id="primary" class="site-main dna-line-landing">
+      <?php dna_render_rank_math_breadcrumbs(); ?>
 
       <section class="ml-hero">
         <div class="ml-container">
@@ -96,7 +97,11 @@ if ( have_posts() ) :
                               echo get_the_post_thumbnail(
                                 $product_id,
                                 'woocommerce_thumbnail',
-                                array( 'class' => 'ml-product-img', 'loading' => 'lazy' )
+                                array(
+                                  'class' => 'ml-product-img',
+                                  'loading' => 'lazy',
+                                  'alt' => esc_attr( dna_image_alt_from_context( $product_id, $title . ' Montessori line product image' ) ),
+                                )
                               ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                             ?>
                           <?php else : ?>

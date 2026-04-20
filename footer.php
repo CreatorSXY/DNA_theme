@@ -1,5 +1,3 @@
-</main>
-
 <?php
 /**
  * Footer — keep structural integrity 100% correct.

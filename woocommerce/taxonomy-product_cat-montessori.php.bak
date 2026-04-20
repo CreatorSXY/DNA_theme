@@ -66,9 +66,9 @@ $q = new WP_Query([
 
 ?>
 
-<!-- DNA TEMPLATE MARKER: v12.4 montessori-line -->
+<!-- DNA TEMPLATE MARKER: v19.4 montessori-line -->
 
-<main id="primary" class="site-main dna-line dna-line--montessori" data-dna-template="montessori-line-v93">
+<main id="primary" class="site-main dna-line dna-line--montessori" data-dna-template="montessori-line-v19.4">
   <section class="dna-line-hero">
     <div class="dna-line-container">
       <h1 class="dna-line-title">MONTESSORI LINE</h1>
@@ -141,7 +141,7 @@ $q = new WP_Query([
   </section>
 
   <style>
-    /* v12.4: Montessori Line layout — minimal, editorial, consistent with DNA */
+    /* v19.4: Montessori Line layout — minimal, editorial, consistent with DNA */
 
     /* Ensure every page has at least one-screen content height */
     body:not(.home) .site-main{ min-height: 100vh; }

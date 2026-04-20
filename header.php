@@ -60,11 +60,13 @@
           'depth'          => 1,
         ]);
       ?>
-      <?php if (class_exists('WooCommerce')): ?>
-        <a class="drawer-cart" href="<?php echo esc_url(wc_get_cart_url()); ?>">Cart <span class="dna-cart-count"><?php echo '(' . esc_html(dna_get_cart_count()) . ')'; ?></span></a>
-      <?php endif; ?>
     </div>
   </div>
 </header>
 
-<main id="main" class="site-main">
+<div class="dna-shipping-banner" role="region" aria-label="Shipping promotion">
+  <div class="dna-shipping-banner__inner container">
+    <span class="dna-shipping-banner__text">Free shipping on orders over $50!</span>
+    <button class="dna-shipping-banner__close" type="button" aria-label="Dismiss shipping promotion">×</button>
+  </div>
+</div>

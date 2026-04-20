@@ -50,6 +50,7 @@ if ( have_posts() ) :
     }
     ?>
     <main id="primary" class="site-main dna-line-landing line-page">
+      <?php dna_render_rank_math_breadcrumbs(); ?>
 
       <section class="ml-hero">
         <div class="ml-container">
@@ -80,7 +81,9 @@ if ( have_posts() ) :
               <?php foreach ($products as $pid) :
                 $permalink = get_permalink($pid);
                 $title     = get_the_title($pid);
-                $thumb     = get_the_post_thumbnail($pid, 'large');
+                $thumb     = get_the_post_thumbnail($pid, 'large', [
+                  'alt' => esc_attr(dna_image_alt_from_context($pid, $title . ' line product image')),
+                ]);
               ?>
                 <a class="ml-card" href="<?php echo esc_url($permalink); ?>">
                   <div class="ml-thumb"><?php echo $thumb ?: '<div class="ml-thumb placeholder"></div>'; ?></div>

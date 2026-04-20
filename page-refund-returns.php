@@ -7,6 +7,7 @@ get_header();
 
 <main class="page privacy-page refund-page">
   <div class="container">
+    <?php dna_render_rank_math_breadcrumbs(); ?>
     <h1 class="page-title">Refund and Returns Policy</h1>
 
     <div class="privacy-body">

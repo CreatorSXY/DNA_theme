@@ -1,4 +1,4 @@
-/* DNA Global Contact Popup — v12.4 architecture (v12.4)
+/* DNA Global Contact Popup — v19.4 architecture (v19.4)
    Less is more: no shadows, no radius, clean type.
 */
 
@@ -91,7 +91,7 @@ button.dna-contact-trigger:hover{ opacity: 1; }
   margin: 0 0 10px;
 }
 
-/* v12.4: Keep Contact popup inputs perfectly square even on WooCommerce pages.
+/* v19.4: Keep Contact popup inputs perfectly square even on WooCommerce pages.
    WooCommerce form styles are quite specific (e.g. .woocommerce input[type="text"]).
    We out-specify them here so Name/Email never inherit rounded corners.
 */

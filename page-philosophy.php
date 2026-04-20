@@ -7,6 +7,7 @@ get_header();
 ?>
 
 <main id="primary" class="site-main page philosophy-page">
+  <?php dna_render_rank_math_breadcrumbs(); ?>
 
   <section class="ph-hero">
     <div class="container">

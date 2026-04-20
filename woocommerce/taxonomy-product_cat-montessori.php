@@ -3,7 +3,7 @@
  * Backward-compat shim.
  *
  * Older DNA versions used a Montessori-specific WooCommerce taxonomy template.
- * v12.4 removes ALL slug hard-coding; delegate to the unified taxonomy template.
+ * v19.4 removes ALL slug hard-coding; delegate to the unified taxonomy template.
  */
 
 defined('ABSPATH') || exit;

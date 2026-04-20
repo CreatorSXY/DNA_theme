@@ -41,7 +41,8 @@ function dna_line_kicker_number($i) {
 }
 ?>
 
-<main id="primary" class="site-main dna-line-index line-page" data-dna-template="line-index-v12.4">
+<main id="primary" class="site-main dna-line-index line-page" data-dna-template="line-index-v19.4">
+  <?php dna_render_rank_math_breadcrumbs(); ?>
   <div class="line-container">
 
     <header class="line-page-header" aria-label="Lines">
@@ -97,7 +98,9 @@ function dna_line_kicker_number($i) {
           <?php if (!$is_empty) : ?>
             <div class="line-grid" role="list">
               <?php foreach ($product_ids as $pid) :
-                $thumb = get_the_post_thumbnail($pid, 'large');
+                $thumb = get_the_post_thumbnail($pid, 'large', [
+                  'alt' => esc_attr(dna_image_alt_from_context($pid, 'Line product image')),
+                ]);
                 $plink = get_permalink($pid);
               ?>
                 <a class="line-thumb" href="<?php echo esc_url($plink); ?>" role="listitem" aria-label="<?php echo esc_attr(get_the_title($pid)); ?>">

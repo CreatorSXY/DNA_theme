@@ -13,6 +13,7 @@ get_header();
 if (!class_exists('WooCommerce')) : ?>
   <main id="primary" class="site-main">
     <div class="container" style="padding:72px 22px;">
+      <?php dna_render_rank_math_breadcrumbs(); ?>
       <h1><?php echo esc_html(get_the_archive_title()); ?></h1>
       <p><?php echo esc_html__('WooCommerce is not active.', 'dna'); ?></p>
     </div>
@@ -39,6 +40,19 @@ if ($desc_raw !== '' && stripos($desc_raw, '<p') === false) {
 
 $per_page = 24;
 $paged = max(1, (int)get_query_var('paged'));
+$line_hero_image_id = function_exists( 'dna_get_theme_image_id' ) ? dna_get_theme_image_id( 'line_hero' ) : 0;
+$line_hero_image_html = '';
+if ( $line_hero_image_id && function_exists( 'dna_render_original_attachment_image' ) ) {
+  $line_hero_image_html = dna_render_original_attachment_image(
+    $line_hero_image_id,
+    [
+      'class'    => 'media-placeholder__img',
+      'loading'  => 'eager',
+      'decoding' => 'async',
+      'alt'      => dna_attachment_alt_from_context( $line_hero_image_id, 'Line hero visual' ),
+    ]
+  );
+}
 
 $q = new WP_Query([
   'post_type'           => 'product',
@@ -58,10 +72,18 @@ $q = new WP_Query([
 ]);
 ?>
 
-<main id="primary" class="site-main dna-line-term dna-line-term--<?php echo esc_attr(sanitize_title($term_slug)); ?>" data-dna-template="line-term-v12.6">
-  <section class="dna-line-term__hero">
+<main id="primary" class="site-main dna-line-term dna-line-term--<?php echo esc_attr(sanitize_title($term_slug)); ?>" data-dna-template="line-term-v19.4">
+  <?php dna_render_rank_math_breadcrumbs(); ?>
+  <section class="dna-line-term__hero" data-dna-reveal data-dna-reveal-order="1">
     <div class="dna-line-term__container">
       <h1 class="dna-line-term__title"><?php echo esc_html($title); ?></h1>
+      <div class="dna-line-term__hero-visual media-placeholder media-placeholder--light<?php echo $line_hero_image_html !== '' ? ' has-media' : ''; ?>" data-dna-depth aria-hidden="true">
+        <?php if ( $line_hero_image_html !== '' ) : ?>
+          <?php echo $line_hero_image_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+        <?php else : ?>
+          <span class="media-placeholder__label">Line Visual Placeholder</span>
+        <?php endif; ?>
+      </div>
 
       <?php if ($desc_raw !== '') : ?>
         <div class="dna-line-term__body">
@@ -71,7 +93,7 @@ $q = new WP_Query([
     </div>
   </section>
 
-  <section class="dna-line-term__products">
+  <section class="dna-line-term__products" data-dna-reveal data-dna-reveal-order="2">
     <div class="dna-line-term__container">
       <h2 class="dna-line-term__subtitle">Products</h2>
 
@@ -90,7 +112,12 @@ $q = new WP_Query([
                       echo get_the_post_thumbnail(
                         $pid,
                         'large',
-                        ['class' => 'dna-line-term__img', 'loading' => 'lazy', 'decoding' => 'async']
+                        [
+                          'class' => 'dna-line-term__img',
+                          'loading' => 'lazy',
+                          'decoding' => 'async',
+                          'alt' => esc_attr(dna_image_alt_from_context($pid, $name . ' category product image')),
+                        ]
                       );
                     ?>
                   <?php else : ?>

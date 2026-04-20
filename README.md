@@ -1,59 +1,90 @@
 # DNA WordPress Theme
 
-Minimal, WooCommerce-first WordPress theme for **Design n’ Aesthetics (DNA)**. The theme ships with pre-built page templates, curated WooCommerce integrations, and compiled CSS/JS assets so you can activate it without a build step.
+一个以 WooCommerce 为核心的定制主题，面向 **Design n’ Aesthetics (DNA)** 站点。仓库内已包含可直接部署的 PHP 模板、CSS、JS 与 WooCommerce 覆盖文件，无需前端构建流程。
 
-## Requirements
+## 环境要求
 
 - WordPress 6.x
 - PHP 8.0+
-- WooCommerce 7.x or newer (the theme replaces most default WooCommerce styling)
+- WooCommerce 7.x+
 
-## Installation
+## 安装方式
 
-1. Copy or clone this repository into `wp-content/themes/dna` (or keep the folder name consistent with the theme slug).
-2. Activate **DNA** from **Appearance → Themes**.
-3. Assign your primary navigation to the **Primary** menu location so the header and drawer render correctly.
-4. In **WooCommerce → Settings → Products → Permalinks**, set the **Product category base** to `line` to match the built-in URLs and templates.
+1. 将本仓库放入 `wp-content/themes/dna`（目录名建议与主题 slug 保持一致）。
+2. 在 WordPress 后台 **外观 → 主题** 启用 DNA。
+3. 在 **外观 → 菜单** 将主导航分配到 `Primary Menu`。
+4. 在 **WooCommerce → 设置 → 产品 → 固定链接** 中，将 **产品分类基础** 设置为 `line`，以匹配主题的分类路由与模板。
 
-> The theme disables WooCommerce’s bundled styles and relies on its own CSS (`assets/css/*.css`) and JS (`assets/js/*.js`).
+## 主题核心能力（基于当前代码）
 
-## Core behavior
+- **WooCommerce 深度接管**  
+  主题关闭了 WooCommerce 默认样式，并使用自定义模板与样式接管商店、分类与相关页面展示。
+- **/line/ 分类路由兼容**  
+  针对 `product_cat` 实现了 line 风格路由与模板匹配（含 Montessori 专用分类模板）。
+- **全局 Contact Drawer**  
+  通过 `template-parts/contact-popup.php` + `assets/js/contact-popup.js` 实现全站弹出联系层。
+- **后台可视化图片槽位管理**  
+  在 `外观 → DNA Images` 可管理首页/B2B/Case/Shop/Line 等主视觉，以及 Case Study 轮播图。
+- **后台 SEO/文案批量导入工具**  
+  在 `工具 → DNA Rank Math Import` 支持上传 CSV，更新产品 Rank Math 字段和商品描述。
+- **B2B 报价管理工具**  
+  通过主题后台页维护阶梯价、表格与相关展示配置。
 
-- **Custom WooCommerce framing:** The theme removes WooCommerce’s default wrappers, breadcrumbs, and styles, replacing them with DNA-branded markup and layouts. It also adds live cart counts to menus and custom account endpoints for “Billing & Shipping” plus “Return & Exchange.”
-- **Line-first taxonomy routing:** Product categories are treated as “Lines.” The theme expects `/line/{slug}` URLs and will route requests to the matching `product_cat` taxonomy even when a WordPress page exists for that slug.
-- **Global contact drawer:** Every page includes a slide-in contact form (`template-parts/contact-popup.php`) that is toggled by the “CONTACT” button.
+## 页面与模板结构
 
-## Homepage setup
+### 根目录模板
 
-The bundled `front-page.php` template uses the Customizer to feature up to three products:
+- `front-page.php`：首页。
+- `page.php`、`index.php`：通用页面/兜底模板。
+- `page-line.php`：Line 聚合页。
+- `page-line-landing.php`：Line 落地页模板。
+- `page-montessori.php`、`page-montessori-line.php`：Montessori 相关页面。
+- `page-b2b.php`：B2B 页面。
+- `page-case-study.php`：案例页（含 Hero 轮播）。
+- `page-contact.php`：联系页。
+- `page-philosophy.php`：品牌理念页。
+- `page-privacy.php`、`page-refund-returns.php`：政策类页面。
+- `woocommerce.php`：WooCommerce 内容包装模板。
+- `taxonomy-product_cat.php`、`taxonomy-product_cat-montessori.php`：产品分类模板。
 
-1. Go to **Appearance → Customize → Homepage**.
-2. Select products for “Homepage product 1/2/3.”
-3. If fewer than three are selected, the template falls back to the latest published products.
+### WooCommerce 覆盖
 
-## Line landing pages
+- `woocommerce/archive-product.php`
+- `woocommerce/taxonomy-product_cat-montessori.php`
 
-Use the **DNA Line Landing** page template (`page-line-landing.php`) to create landing pages for each product line:
+> 说明：`woocommerce/taxonomy-product_cat-montessori.php.bak` 为备份文件，不参与标准模板加载。
 
-1. Create a new page (slug should mirror the product category slug, e.g., `montessori`).
-2. Choose **DNA Line Landing** under **Page Attributes → Template**.
-3. Add body content—the first paragraph becomes the lead; subsequent paragraphs become the body copy.
-4. Optionally set a custom field `dna_line_category` to point to a different product category slug if the page slug and category differ.
-5. The template will render up to three products from the matched category, with placeholders if none exist.
+### 可复用组件
 
-## Template map
+- `template-parts/site-footer.php`
+- `template-parts/contact-popup.php`
 
-- `front-page.php` — Homepage hero and featured products grid.
-- `page-line-landing.php` — Line landing pages that auto-pull products from matching categories.
-- `page-line.php` — Simple “Line” index page for browsing collections.
-- `page-montessori-line.php` and `page-montessori.php` — Pre-styled Montessori marketing pages.
-- `page-philosophy.php` — Philosophy/mission page layout.
-- `page-b2b.php` — Business inquiries CTA page.
-- `page-privacy.php` and `page-refund-returns.php` — Legal/policy templates aligned to theme styles.
-- `taxonomy-product_cat.php` and `taxonomy-product_cat-montessori.php` — Product category archive overrides.
-- `woocommerce.php` — Wrapper for WooCommerce content areas.
+## 静态资源
 
-## Assets
+- CSS：
+  - `style.css`
+  - `assets/css/styles.css`
+  - `assets/css/shop.css`
+  - `assets/css/woocommerce.css`
+  - `assets/css/line.css`
+  - `assets/css/b2b-wizard.css`
+  - `assets/css/contact-popup.css`
+- JS：
+  - `assets/js/main.js`
+  - `assets/js/account.js`
+  - `assets/js/variations.js`
+  - `assets/js/b2b-wizard.js`
+  - `assets/js/contact-popup.js`
 
-CSS and JS are already compiled in `assets/`. There is no build pipeline in this repository; adjust styles/scripts directly or replace the compiled assets. Cache-busting is handled via `filemtime`-based versioning in `functions.php` whenever files change.
+主题通过 `functions.php` 中的 `filemtime` 方式进行资源版本控制（缓存自动失效），仓库中不包含打包构建脚本。
 
+## 后台配置入口速览
+
+- **外观 → DNA Images**：主题关键图片槽位。
+- **外观 → B2B Pricing**：B2B 报价与案例图片相关配置。
+- **工具 → DNA Rank Math Import**：CSV 导入 SEO/描述字段。
+
+## 开发说明
+
+- 本仓库是“直接修改即生效”的主题结构：编辑 PHP/CSS/JS 后即可在 WordPress 中验证。
+- 建议在修改 WooCommerce 相关模板后同步检查：Shop、分类页、购物车、结账、我的账户等关键流程。

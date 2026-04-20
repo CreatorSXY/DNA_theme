@@ -1,0 +1,175 @@
+/* =========================
+   DNA — Shop (Archive) Styles
+   File: assets/css/shop.css
+   ========================= */
+
+:root{
+  --dna-wrap: 1120px;
+  --dna-pad: 32px;
+  --dna-gap: 88px;
+  --dna-gap-md: 64px;
+  --dna-gap-sm: 40px;
+}
+
+body.woocommerce-page{
+  background:#fff;
+}
+
+.dna-shop{
+  max-width: var(--dna-wrap);
+  margin: 0 auto;
+  padding: 92px var(--dna-pad) 86px; /* more breathing room from header */
+}
+
+.dna-shop__header{
+  text-align:center;
+  padding: 0 0 44px;
+}
+
+.dna-shop__kicker{
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  margin: 0 0 14px;
+}
+
+.dna-shop__title{
+  font-size: 32px;            /* less "Woo default" */
+  line-height: 1.08;
+  margin: 0 0 12px;
+  letter-spacing: -0.01em;
+}
+
+.dna-shop__subtitle{
+  margin: 0 auto 10px;
+  max-width: 68ch;
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  opacity: .7;
+}
+
+.dna-shop__desc{
+  max-width: 62ch;
+  margin: 0 auto;
+  font-size: 14px;
+  line-height: 1.7;
+  opacity: 0.7;
+}
+
+.dna-shop__hero-visual{
+  margin: 26px auto 0;
+  width: min(940px, 100%);
+  min-height: clamp(180px, 24vw, 300px);
+}
+
+.dna-shop__grid{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: var(--dna-gap);
+  align-items:start;
+}
+
+/* Exhibit card */
+.dna-card{
+  border-radius: 0;
+  transition: transform .28s ease;
+}
+
+.dna-card:hover{
+  transform: translateY(-4px);
+}
+
+.dna-card__link{
+  display:block;
+  text-decoration:none;
+  color:inherit;
+}
+
+.dna-card__media{
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid rgba(0,0,0,.1);
+  background: #f8f8f6;
+}
+
+/* Image-led cards */
+.dna-card__img,
+.dna-card__media img{
+  width: 100%;
+  height: 100%;
+  display:block;
+  object-fit: cover;
+  transition: transform .35s ease;
+}
+.dna-card:hover .dna-card__img,
+.dna-card:hover .dna-card__media img{ transform: scale(1.03); }
+
+.dna-card__meta{
+  text-align:center;
+  padding-top: 14px;
+}
+
+.dna-card__name{
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin: 0 0 6px;
+  opacity: 0.92;
+}
+
+.dna-card__price{
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+/* Hide Woo default ordering/count, just in case */
+.woocommerce-result-count,
+.woocommerce-ordering{
+  display:none !important;
+}
+
+/* Pagination */
+.dna-shop__footer{
+  padding-top: 66px;
+  display:flex;
+  justify-content:center;
+}
+
+.woocommerce nav.woocommerce-pagination ul{
+  border:0;
+  display:inline-flex;
+  gap: 10px;
+}
+.woocommerce nav.woocommerce-pagination ul li{ border:0; }
+.woocommerce nav.woocommerce-pagination ul li a,
+.woocommerce nav.woocommerce-pagination ul li span{
+  border: 1px solid rgba(0,0,0,.10);
+  border-radius: 0;
+  padding: 10px 14px;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background:#fff;
+}
+.woocommerce nav.woocommerce-pagination ul li span.current{
+  border-color: rgba(0,0,0,.25);
+}
+
+/* Responsive */
+@media (max-width: 1100px){
+  .dna-shop{ padding-left: 28px; padding-right: 28px; }
+  .dna-shop__grid{ gap: var(--dna-gap-md); }
+}
+@media (max-width: 900px){
+  .dna-shop__grid{ grid-template-columns: repeat(2, minmax(0,1fr)); gap: var(--dna-gap-sm); }
+}
+@media (max-width: 560px){
+  .dna-shop{ padding-left: 20px; padding-right: 20px; }
+  .dna-shop__grid{ grid-template-columns: 1fr; gap: 28px; }
+}
